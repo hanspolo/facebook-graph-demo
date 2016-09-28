@@ -1,0 +1,29 @@
+<h1>Graph overview</h1>
+
+<% if current_user.facebook_key.nil? %>
+  <p>You haven't authorized this app on facebook yet to access the Graph API<p>
+<% end %>
+
+<% if current_user.facebook_key.present? && current_user.facebook_id.nil? %>
+  <p>Your app is authorized. Please wait until we accessed your data</p>
+<% end %>
+
+<h2>Overview of your facebook friends</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Your friends ids</th>
+      <th>and names</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @friends.each do |friend| %>
+      <tr>
+        <td><%= friend[:id] %></td>
+        <td><%= friend[:name] %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
