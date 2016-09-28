@@ -2,13 +2,19 @@
 
 <% if current_user.facebook_key.nil? %>
   <p>You haven't authorized this app on facebook yet to access the Graph API<p>
+  <ul>
+    <li><%= link_to 'Authorize now', new_graph_path %></li>
+  </ul>
 <% end %>
 
-<% if current_user.facebook_key.present? && current_user.facebook_id.nil? %>
-  <p>Your app is authorized. Please wait until we accessed your data</p>
+<% if @name.present? %>
+  <p>Hi <%= @data['name'] %></p>
 <% end %>
 
 <h2>Overview of your facebook friends</h2>
+
+<pre><%= @response %></pre>
+<pre><%= @data.inspect %></pre>
 
 <table>
   <thead>
@@ -19,11 +25,17 @@
   </thead>
 
   <tbody>
-    <% @friends.each do |friend| %>
+    <% @data['friends']['data'].each do |friend| %>
       <tr>
-        <td><%= friend[:id] %></td>
-        <td><%= friend[:name] %></td>
+        <td><%= friend['id'] %></td>
+        <td><%= friend['name'] %></td>
       </tr>
     <% end %>
   </tbody>
+
+  <tfoot>
+    <tr>
+      <td colspan="2">You have <b><%= @data['friends']['summary']['total_count'] %> friends</b>, <b><%= @data['friends']['data'].count %></b> of them use conferator.</td>
+    </tr>
+  </tfoot>
 </table>
