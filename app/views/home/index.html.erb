@@ -1,0 +1,14 @@
+<h1>Welcome to Facebook Graph Demo</h1>
+
+<% if user_signed_in? %>
+  <p>Go to the graphs index page to get started</p>
+  <ul>
+    <li><%= link_to 'Graphs', graphs_path %></li>
+  </ul>
+<% else %>
+  <p>Before you can use the demo, please create an account or log in.
+  <ul>
+    <li><%= link_to 'Sign up', new_user_registration_path %></li>
+    <li><%= link_to 'Log in', new_user_session_path %></li>
+  </ul>
+<% end %>
