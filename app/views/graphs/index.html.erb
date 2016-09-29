@@ -7,35 +7,40 @@
   </ul>
 <% end %>
 
-<% if @name.present? %>
+<% if @data.try(:[], 'name').present? %>
   <p>Hi <%= @data['name'] %></p>
 <% end %>
 
 <h2>Overview of your facebook friends</h2>
 
-<pre><%= @response %></pre>
+<!-- <pre><%= @response.inspect %></pre> -->
+
 <pre><%= @data.inspect %></pre>
 
-<table>
-  <thead>
-    <tr>
-      <th>Your friends ids</th>
-      <th>and names</th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @data['friends']['data'].each do |friend| %>
+<% if current_user.facebook_key.present? %>
+  <table>
+    <thead>
       <tr>
-        <td><%= friend['id'] %></td>
-        <td><%= friend['name'] %></td>
+        <th>Your friends ids</th>
+        <th>and names</th>
       </tr>
-    <% end %>
-  </tbody>
+    </thead>
 
-  <tfoot>
-    <tr>
-      <td colspan="2">You have <b><%= @data['friends']['summary']['total_count'] %> friends</b>, <b><%= @data['friends']['data'].count %></b> of them use conferator.</td>
-    </tr>
-  </tfoot>
-</table>
+    <tbody>
+      <% @data.try(:[], 'friends').try(:[], 'data').try(:each) do |friend| %>
+        <tr>
+          <td><%= friend['id'] %></td>
+          <td><%= friend['name'] %></td>
+        </tr>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <tr>
+        <td colspan="2">You have <b><%= @data.try(:[], 'friends').try(:[], 'summary').try(:[], 'total_count') %> friends</b>, <b><%= @data.try(:[], 'friends').try(:[], 'data').try(:count) %></b> of them use conferator.</td>
+      </tr>
+    </tfoot>
+  </table>
+<% else %>
+  <p>Authorize the app first</p>
+<% end %>
